@@ -1,7 +1,8 @@
 #TEMA 1
+PATH_DATA <- file.path('/home','ruben','Documentos','Programas','practical-statistics-for-data-scientists-master')
 
 #Carga el archivo csv y lo guarda en state
-state <- read.csv('/home/ruben/Documentos/practicasDatos/data/state.csv') 
+state <- read.csv(file.path(PATH_DATA, 'data','state.csv'))
 state #muestro los datos
 
 #MEDIAS
@@ -47,11 +48,18 @@ hist(state[['Murder.Rate']], freq=FALSE, main='Homicidios frente a porcentaje de
 lines(density(state[['Murder.Rate']]), lwd=3, col='blue')
 
 #CARGO NUEVO CSV CON DATOS
-dfw <- read.csv('/home/ruben/Documentos/practicasDatos/data/dfw_airline.csv')
+dfw <- read.csv(file.path(PATH_DATA, 'data', 'dfw_airline.csv'))
 #Genero grafico de barras para los valores almacenados en dfw
 barplot(as.matrix(dfw)/6, cex.axis=0.8, cex.names = 0.7, xlab='Causa del retraso', ylab = 'Recuento')
 
-
+#CORRELACIÓN
+#Cargo los archivos de datos
+sp500_px <- read.csv(file.path(PATH_DATA, 'data', 'sp500_data.csv.gz'), row.names=1)
+sp500_sym <- read.csv(file.path(PATH_DATA, 'data', 'sp500_sectors.csv'), stringsAsFactors = FALSE)
+#genero tabla para rentabilidades por fecha para las acciones de telecomunicaciones
+etfs <- sp500_px[row.names(sp500_px) > '2012-07-01', sp500_sym[sp500_sym$sector == 'etf', 'symbol']]
+library(corrplot) ##cargo libreria corrplot
+corrplot(cor(etfs), method='ellipse') #genero el gráfico
 
 #PRUEBAS
 state
