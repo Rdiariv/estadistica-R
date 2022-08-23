@@ -56,10 +56,21 @@ barplot(as.matrix(dfw)/6, cex.axis=0.8, cex.names = 0.7, xlab='Causa del retraso
 #Cargo los archivos de datos
 sp500_px <- read.csv(file.path(PATH_DATA, 'data', 'sp500_data.csv.gz'), row.names=1)
 sp500_sym <- read.csv(file.path(PATH_DATA, 'data', 'sp500_sectors.csv'), stringsAsFactors = FALSE)
+
+telecom <- sp500_px[, sp500_sym[sp500_sym$sector == 'telecommunications_services', 'symbol']]
+telecom <- telecom[row.names(telecom) > '2012-07-01']
+telecom_cor <- cor(telecom)
+
+
 #genero tabla para rentabilidades por fecha para las acciones de telecomunicaciones
 etfs <- sp500_px[row.names(sp500_px) > '2012-07-01', sp500_sym[sp500_sym$sector == 'etf', 'symbol']]
 library(corrplot) ##cargo libreria corrplot
 corrplot(cor(etfs), method='ellipse') #genero el gráfico
+
+#Diagramas de dispersión
+##Utilizo los valores guardados en telecom
+
+plot(telecom$T , telecom$VZ, xlab='ATT (T)', ylab='Verizon (VZ)')
 
 #PRUEBAS
 state
